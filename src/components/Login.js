@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-function Login({ setIsLoggedIn }) {
+function Login({ onLogin }) {
   const history = useHistory();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+  });
+
+  const [buttonStyles, setButtonStyles] = useState({
+    backgroundColor: "blue", 
   });
 
   function handleChange(e) {
@@ -18,28 +22,50 @@ function Login({ setIsLoggedIn }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    setIsLoggedIn(true);
-
-    // after logging the user in, redirect to the home page!
-    history.push("/");
+    
+    if (formData.username === "user" && formData.password === "password") {
+      onLogin({ username: formData.username });
+      history.push("/");
+    } else {
+      alert("Invalid username or password");
+    }
   }
 
+  const buttonStylesHover = {
+    backgroundColor: "blue",
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} style={formContainerStyles}>
       <h1>Login</h1>
-      <input
-        type="text"
-        name="username"
-        value={formData.username}
-        onChange={handleChange}
-      />
-      <input
-        type="password"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      <button type="submit">Login</button>
+      <div>
+        <label>Username:</label>
+        <input
+          type="text"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          style={inputStyles}
+        />
+      </div>
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          style={inputStyles}
+        />
+      </div>
+      <button
+        type="submit"
+        style={buttonStyles}
+        onMouseEnter={() => setButtonStyles(buttonStylesHover)}
+        onMouseLeave={() => setButtonStyles({ backgroundColor: "blue" })}
+      >
+        Login
+      </button>
     </form>
   );
 }
